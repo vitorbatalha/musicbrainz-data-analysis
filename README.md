@@ -1,2 +1,0 @@
-# musicbrainz-data-analysis
-## wip
