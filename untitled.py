@@ -21,7 +21,6 @@ def get_album_info(nome_album, nome_artista=None):
         rg = res["release-group-list"][0]
         rgid = rg["id"]
 
-        # Step 2: Fetch details with includes
         details = musicbrainzngs.get_release_group_by_id(
             rgid,
             includes=["releases", "tags"]
@@ -29,14 +28,12 @@ def get_album_info(nome_album, nome_artista=None):
 
         release_group = details["release-group"]
 
-        # Choose the first release for track info
         release_id = release_group["release-list"][0]["id"]
         release = musicbrainzngs.get_release_by_id(
             release_id,
             includes=["recordings", "release-groups"]
         )["release"]
 
-        # Step 3: Extract track info
         tracks = []
         total_length = 0
         for medium in release.get("medium-list", []):
@@ -49,7 +46,6 @@ def get_album_info(nome_album, nome_artista=None):
                     "length_sec": round(length_ms / 1000, 2)
                 })
 
-        # Step 4: Extract metadata
         country = release.get("country", "unknown")
         genres = [tag["name"] for tag in release_group.get("tag-list", [])]
 
